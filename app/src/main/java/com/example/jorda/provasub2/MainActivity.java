@@ -2,11 +2,10 @@ package com.example.jorda.provasub2;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telecom.Call;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.example.jorda.provasub2.Model.DadosClima;
+import com.example.jorda.provasub2.Model.Currently;
 import com.example.jorda.provasub2.Service.InterfaceDeServicos;
 import com.example.jorda.provasub2.Service.RetrofitService;
 
@@ -20,38 +19,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       ImprimeImagem();
+       muitaTreta();
     }
 
-    private void ImprimeImagem() {
+    private void muitaTreta() {
 
         /*Esta classe imprime a imagem a partir de parte do jason recebido pela busca retrofit */
 
         InterfaceDeServicos service = RetrofitService.getServico();
-        retrofit2.Call<DadosClima> call = service.consulta();
+        retrofit2.Call<Currently> call = service.consulta();
 
-        call.enqueue(new Callback<DadosClima>() {
+        call.enqueue(new Callback<Currently>() {
             @Override
-            public void onResponse(retrofit2.Call<DadosClima> call, Response<DadosClima> response) {
+            public void onResponse(retrofit2.Call<Currently> call, Response<Currently> response) {
                 //pega o conteúdo do corpo do do resultado - incluindo todos os dados da busca
-                DadosClima dadosClima = response.body();
+                Currently dadosClima = response.body();
+
 
                 //seleciona a parte que interessa e passa a busca o valor para a imagem ser alterada
-                ImprimeImagem(String );
+                ImprimeImagem(dadosClima.getIcon());
             }
-
             @Override
-            public void onFailure(retrofit2.Call<DadosClima> call, Throwable t) {
+            public void onFailure(retrofit2.Call<Currently> call, Throwable t) {
                 Log.i("debug", t.getMessage());
             }
         });
-
     }
-        public void ImprimeImagem(){
+        public void ImprimeImagem(String i){
             ImageView imagem = (ImageView) findViewById(R.id.imagemClima);
 
-
-            String i = "aaaaa";  //Relacionar com os dados recebidos pelo servico
+           //Relacionar com os dados recebidos pelo servico
             if (i.equals("rain")){
                 imagem.setImageResource(R.drawable.rain);
             }
